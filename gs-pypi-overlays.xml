@@ -6,7 +6,7 @@
     <description>python packages</description>
     <homepage>https://pypi.python.org/pypi</homepage>
     <owner>
-      <email>piatlicki@gmail.com</email>
+      <email>jauhien@gentoo.org</email>
       <name>Jauhien Piatlicki</name>
     </owner>
     <source type="g-sorcery">gs-pypi pypi</source>

@@ -7,7 +7,7 @@
     
     PyPI package database
     
-    :copyright: (c) 2013 by Jauhien Piatlicki
+    :copyright: (c) 2013-2014 by Jauhien Piatlicki
     :license: GPL-2, see LICENSE for more details.
 """
 
@@ -265,7 +265,7 @@ class PypiDBGenerator(DBGenerator):
 
             dependencies = serializable_elist(separator="\n\t")
             eclasses = ['g-sorcery', 'gs-pypi']
-            maintainer = [{'email' : 'piatlicki@gmail.com',
+            maintainer = [{'email' : 'jauhien@gentoo.org',
                            'name' : 'Jauhien Piatlicki'}]
 
             ebuild_data = {}

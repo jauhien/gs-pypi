@@ -6,11 +6,11 @@ gs-pypi
 manage overlays for PYPI repository
 -----------------------------------
 
-:Author: Written by Jauhien Piatlicki <piatlicki@gmail.com>. GSoC idea
+:Author: Written by Jauhien Piatlicki <jauhien@gentoo.org>. GSoC idea
 	 and mentorship by Rafael Martins. Lots of help and improvements
 	 by Brian Dolbec.
-:Date:   2013-08-04
-:Copyright: Copyright (c) 2013 Jauhien Piatlicki, License: GPL-2
+:Date:   2014-05-10
+:Copyright: Copyright (c) 2013-2014 Jauhien Piatlicki, License: GPL-2
 :Version: 0.1
 :Manual section: 8
 :Manual group: g-sorcery
@@ -127,4 +127,4 @@ NOTES
 SEE ALSO
 ========
 
-**gs-elpa**\(8), **gs-ctan**\(8), **g-sorcery.cfg**\(8), **portage**\(5), **emerge**\(1), **layman**\(8)
+**gs-elpa**\(8), **g-sorcery.cfg**\(8), **portage**\(5), **emerge**\(1), **layman**\(8)
