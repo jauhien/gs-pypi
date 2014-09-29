@@ -4,18 +4,9 @@ This is [g-sorcery](https://github.com/jauhien/g-sorcery) backend for Python PyP
 Installation
 ======================
 
-Currently gs-pypi is not keyworded, so [add keywords](https://bitbucket.org/mgorny/flaggie/), then install it:
-
-```
-flaggie app-portage/gs-pypi '+**'
-```
-
 ```
 emerge -va gs-pypi
 ```
-
-Note that it needs layman-9999.
-
 
 Usage
 ======================
