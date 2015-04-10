@@ -4,10 +4,10 @@
 """
     pypi_db.py
     ~~~~~~~~~~
-    
+
     PyPI package database
-    
-    :copyright: (c) 2013-2014 by Jauhien Piatlicki
+
+    :copyright: (c) 2013-2015 by Jauhien Piatlicki
     :license: GPL-2, see LICENSE for more details.
 """
 
@@ -42,15 +42,15 @@ class PypiDBGenerator(DBGenerator):
         data["index"] = {}
 
         pkg_uries = []
-        
+
         for entry in packages.find_all("tr")[1:-1]:
             package, description = entry.find_all("td")
-            
+
             if description.contents:
                 description = description.contents[0]
             else:
                 description = ""
-            package, version = package.a["href"].split("/")[2:]            
+            package, version = package.a["href"].split("/")[2:]
             data["index"][(package, version)] = description
             pkg_uries.append({"uri": self.repo_uri + "pypi/" + package + "/" + version,
                               "parser": self.parse_package_page,
@@ -189,7 +189,7 @@ class PypiDBGenerator(DBGenerator):
                 continue
 
             pkg_data = data["packages"][pkg]
-            
+
             if not pkg_data["files"] and not pkg_data["info"]:
                 continue
 
@@ -229,26 +229,30 @@ class PypiDBGenerator(DBGenerator):
                     if 'Programming Language' in  categories:
                         for entry in categories['Programming Language']:
                             if entry == '2':
-                                py_versions.extend(['2_6', '2_7'])
+                                py_versions.extend(['2_7'])
                             elif entry == '3':
-                                py_versions.extend(['3_2', '3_3'])
+                                py_versions.extend(['3_2', '3_3', '3_4'])
                             elif entry == '2.6':
-                                py_versions.extend(['2_6'])
+                                py_versions.extend(['2_7'])
                             elif entry == '2.7':
                                 py_versions.extend(['2_7'])
                             elif entry == '3.2':
                                 py_versions.extend(['3_2'])
                             elif entry == '3.3':
                                 py_versions.extend(['3_3'])
+                            elif entry == '3.4':
+                                py_versions.extend(['3_4'])
+
 
                     if "License" in categories:
                         pkg_license = categories["License"][-1]
             pkg_license = self.convert([common_config, config], "licenses", pkg_license)
 
             if not py_versions:
-                py_versions = ['2_6', '2_7', '3_2', '3_3']
+                py_versions = ['2_7', '3_2', '3_3', '3_4']
+
             if len(py_versions) == 1:
-                python_compat = 'python' + py_versions[0]
+                python_compat = '( python' + py_versions[0] + ' )'
             else:
                 python_compat = '( python{' + py_versions[0]
                 for ver in py_versions[1:]:
