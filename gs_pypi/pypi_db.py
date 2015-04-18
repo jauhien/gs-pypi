@@ -17,14 +17,27 @@ import time
 
 import bs4
 
+from g_sorcery.db_layout import BSON_FILE_SUFFIX
 from g_sorcery.exceptions import DownloadingError
 from g_sorcery.g_collections import Package, serializable_elist
-from g_sorcery.package_db import DBGenerator
+from g_sorcery.package_db import DBGenerator, PackageDB
 
 class PypiDBGenerator(DBGenerator):
     """
     Implementation of database generator for PYPI backend.
     """
+
+    def __init__(self, package_db_class=PackageDB,
+                 preferred_layout_version=1,
+                 preferred_db_version=1,
+                 preferred_category_format=BSON_FILE_SUFFIX,
+                 count=None):
+        super(PypiDBGenerator, self).__init__(package_db_class=package_db_class,
+                                              preferred_layout_version=preferred_layout_version,
+                                              preferred_db_version=preferred_db_version,
+                                              preferred_category_format=preferred_category_format)
+        self.count = count
+
     def get_download_uries(self, common_config, config):
         """
         Get URI of packages index.
@@ -43,7 +56,10 @@ class PypiDBGenerator(DBGenerator):
 
         pkg_uries = []
 
-        for entry in packages.find_all("tr")[1:-1]:
+        last = -1
+        if self.count:
+            last = self.count
+        for entry in packages.find_all("tr")[1:last]:
             package, description = entry.find_all("td")
 
             if description.contents:
@@ -61,6 +77,8 @@ class PypiDBGenerator(DBGenerator):
         soup.decompose()
 
         pkg_uries = self.decode_download_uries(pkg_uries)
+        if self.count:
+            pkg_uries = pkg_uries[:self.count]
         for uri in pkg_uries:
             attempts = 0
             while True:
@@ -170,6 +188,13 @@ class PypiDBGenerator(DBGenerator):
         category = "dev-python"
         pkg_db.add_category(category)
 
+        common_data = {}
+        common_data["eclasses"] = ['g-sorcery', 'gs-pypi']
+        common_data["maintainer"] = [{'email' : 'jauhien@gentoo.org',
+                                      'name' : 'Jauhien Piatlicki'}]
+        common_data["dependencies"] = serializable_elist(separator="\n\t")
+        pkg_db.set_common_data(category, common_data)
+
         #todo: write filter functions
         allowed_ords_pkg = set(range(ord('a'), ord('z') + 1)) | set(range(ord('A'), ord('Z') + 1)) | \
             set(range(ord('0'), ord('9') + 1)) | set(list(map(ord,
@@ -206,7 +231,7 @@ class PypiDBGenerator(DBGenerator):
             info = pkg_data["info"]
             if info:
                 if "Download URL:" in info:
-                    download_url = pkg_data["info"]["Download URL:"]
+                    download_url = info["Download URL:"]
 
             if download_url:
                 source_uri = download_url #todo: find how to define src_uri
@@ -267,27 +292,17 @@ class PypiDBGenerator(DBGenerator):
             if not match_object:
                 filtered_version = pseudoversion
 
-            dependencies = serializable_elist(separator="\n\t")
-            eclasses = ['g-sorcery', 'gs-pypi']
-            maintainer = [{'email' : 'jauhien@gentoo.org',
-                           'name' : 'Jauhien Piatlicki'}]
-
             ebuild_data = {}
             ebuild_data["realname"] = package
             ebuild_data["realversion"] = version
 
             ebuild_data["description"] = description
             ebuild_data["longdescription"] = description
-            ebuild_data["dependencies"] = dependencies
-            ebuild_data["eclasses"] = eclasses
-            ebuild_data["maintainer"] = maintainer
 
             ebuild_data["homepage"] = homepage
             ebuild_data["license"] = pkg_license
             ebuild_data["source_uri"] = source_uri
             ebuild_data["md5"] = md5
             ebuild_data["python_compat"] = python_compat
-
-            ebuild_data["info"] = info
 
             pkg_db.add_package(Package(category, filtered_package, filtered_version), ebuild_data)

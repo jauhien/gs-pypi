@@ -4,13 +4,14 @@
 """
     pypi_db.py
     ~~~~~~~~~~
-    
+
     PyPI database generation
-    
-    :copyright: (c) 2013 by Jauhien Piatlicki
+
+    :copyright: (c) 2013-2015 by Jauhien Piatlicki
     :license: GPL-2, see LICENSE for more details.
 """
 
+import argparse
 import os
 import sys
 
@@ -22,12 +23,24 @@ from g_sorcery.logger import Logger
 from .pypi_db import PypiDBGenerator
 
 def main():
+    parser = argparse.ArgumentParser(description='Package DB generator for gs-pypi.')
+    parser.add_argument('db_dirname', help='directory to store DB')
+    parser.add_argument('-c', '--count', help='count of records that should be processed',
+                        default=None)
+    parser.add_argument('--layout-version', help='DB layout version', default='1')
+    parser.add_argument('--structure-version', help='DB structure version', default='1')
+    parser.add_argument('-f', '--fmt', help='packages file format (json or bson)', default='bson')
 
-    if len(sys.argv) < 2:
-        print("Usage: ")
-        print("gs-pypi-generate-db db_name")
-        return -1
-    
+    args = parser.parse_args(sys.argv[1:])
+
+    db_name = args.db_dirname
+    count = args.count
+    layout_version = int(args.layout_version)
+    structure_version = int(args.structure_version)
+    fmt = args.fmt
+    if count:
+        count = int(count)
+
     logger = Logger()
     cfg_path = None
     for path in '.', '~', '/etc/g-sorcery':
@@ -45,10 +58,14 @@ def main():
         logger.error('error loading config file for gs-pypi: ' + str(e) + '\n')
         return -1
 
-    generator = PypiDBGenerator()
-    db_name = sys.argv[1]
+    generator = PypiDBGenerator(preferred_layout_version=layout_version,
+                                preferred_db_version=structure_version,
+                                preferred_category_format=fmt,
+                                count=count)
     temp_dir = TemporaryDirectory()
-    pkg_db = generator(temp_dir.name, "pypi", config=config["repositories"]["pypi"], common_config=config["common_config"])
+    pkg_db = generator(temp_dir.name, "pypi",
+                       config=config["repositories"]["pypi"],
+                       common_config=config["common_config"])
     if os.path.exists(db_name):
         os.system('rm -rf ' + db_name + '/*')
     else:

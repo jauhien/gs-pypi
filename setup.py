@@ -1,9 +1,20 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+    setup.py
+    ~~~~~~~~
+
+    installation script
+
+    :copyright: (c) 2013-2015 by Jauhien Piatlicki
+    :license: GPL-2, see LICENSE for more details.
+"""
 
 from distutils.core import setup
 
 setup(name          = 'gs-pypi',
-      version       = '0.1',
+      version       = '0.2',
       description   = 'g-sorcery backend for pypi packages',
       author        = 'Jauhien Piatlicki',
       author_email  = 'jauhien@gentoo.org',
@@ -12,5 +23,5 @@ setup(name          = 'gs-pypi',
       scripts       = ['bin/gs-pypi-generate-db', 'bin/gs-pypi'],
       data_files    = [('/etc/g-sorcery/', ['gs-pypi.json']),
                        ('/etc/layman/overlays/', ['gs-pypi-overlays.xml'])],
-      license       = 'GPL',
+      license       = 'GPL-2',
       )
