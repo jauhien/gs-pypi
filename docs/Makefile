@@ -1,4 +1,4 @@
-MAN_SOURCES=gs-pypi
+MAN_SOURCES=gs-pypi gs-pypi-generate-db
 MANS=$(MAN_SOURCES:=.8)
 
 RST2MAN=rst2man.py

@@ -9,9 +9,9 @@ manage overlays for PYPI repository
 :Author: Written by Jauhien Piatlicki <jauhien@gentoo.org>. GSoC idea
 	 and mentorship by Rafael Martins. Lots of help and improvements
 	 by Brian Dolbec.
-:Date:   2014-05-10
-:Copyright: Copyright (c) 2013-2014 Jauhien Piatlicki, License: GPL-2
-:Version: 0.1
+:Date:   2015-04-22
+:Copyright: Copyright (c) 2013-2015 Jauhien Piatlicki, License: GPL-2
+:Version: 0.2
 :Manual section: 8
 :Manual group: g-sorcery
 
@@ -38,14 +38,16 @@ There are two ways of using **gs-pypi**:
 
     * use it with **layman**
 
-      In this case all you need to do is install **layman-9999** and **g-sorcery**.
+      In this case all you need to do is install **gs-pypi**.
       Then you should just run `layman -L` as
-      root and find an overlay you want. Type of overlay will be
+      root and find an overlay you want (**pypi**). Type of overlay will be
       displayed as *g-sorcery*. Then you add this overlay as
-      usual. It's all you need to do and it's the recommended way of
-      using **gs-pypi**.
-      
-    * use it as stand-alone tool
+      usual. That's the recommended way of
+      using **gs-pypi**. Be aware that by default **pypi** will
+      contain lots of ebuilds, you'll need to change config before
+      adding the overlay (see below) to prevent this.
+
+    * use it as stand-alone tool (not recommended)
 
       In this case you should create an overlay (see **portage** documentation), sync it and populate
       it with one or more ebuilds. Then ebuilds could be installed by emerge or by **gs-pypi** tool.
@@ -97,13 +99,33 @@ Using gs-pypi with layman
 
     **layman -L**
 
-    If you see there a **pypi** overlay then anything should work.
+    If you see there a **pypi** overlay then everything should work.
+
+    **IMPORTANT**
+
+    Change *g-sorcery.cfg* so it includes a list of packages you need,
+    otherwise **gs-pypi** will generate a huge amount of ebuilds (see
+    *g-sorcery.cfg* man page):
+
+    .. code-block::
+
+       [main]
+       package_manager=portage
+
+       [gs-pypi]
+       pypi_packages=pycallgraph
+
+    Packages list is whitespace separated.
+    To list available packages use list
+    command from the next section.
+
+    Add overlay as usual:
 
     **layman -a pypi**
 
     Emerge any package from it using **emerge**.
 
-Generating user ebuilds in user overlay
+Generating user ebuilds in user overlay (not recommended)
     Create new user overlay. Run
 
     **gs-pypi -o** *OVERLAY_DIRECTORY* **-r ctan** **sync**
