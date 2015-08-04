@@ -4,7 +4,9 @@
   "repositories": {
     "pypi": {
       "repo_uri": "https://pypi.python.org/",
-      "db_uri": "https://github.com/jauhien/gs-pypi-db/archive/bson.tar.gz"
+      "sync_method": "git",
+      "db_uri": "https://github.com/jauhien/gs-pypi-db/",
+      "branch": "bson"
     }
   },
   "common_config": {
