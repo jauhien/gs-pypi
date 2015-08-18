@@ -70,7 +70,8 @@ class PypiDBGenerator(DBGenerator):
             data["index"][(package, version)] = description
             pkg_uries.append({"uri": self.repo_uri + "pypi/" + package + "/" + version,
                               "parser": self.parse_package_page,
-                              "output": package + "-" + version})
+                              "output": package + "-" + version,
+                              "timeout": 2})
             entry.decompose()
 
         packages.decompose()
