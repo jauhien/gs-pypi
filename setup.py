@@ -14,7 +14,7 @@
 from distutils.core import setup
 
 setup(name          = 'gs-pypi',
-      version       = '0.2',
+      version       = '0.2.1',
       description   = 'g-sorcery backend for pypi packages',
       author        = 'Jauhien Piatlicki',
       author_email  = 'jauhien@gentoo.org',
