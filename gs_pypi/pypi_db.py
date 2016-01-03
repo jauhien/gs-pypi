@@ -257,17 +257,19 @@ class PypiDBGenerator(DBGenerator):
                             if entry == '2':
                                 py_versions.extend(['2_7'])
                             elif entry == '3':
-                                py_versions.extend(['3_2', '3_3', '3_4'])
+                                py_versions.extend(['3_3', '3_4', '3_5'])
                             elif entry == '2.6':
                                 py_versions.extend(['2_7'])
                             elif entry == '2.7':
                                 py_versions.extend(['2_7'])
                             elif entry == '3.2':
-                                py_versions.extend(['3_2'])
+                                py_versions.extend(['3_3'])
                             elif entry == '3.3':
                                 py_versions.extend(['3_3'])
                             elif entry == '3.4':
                                 py_versions.extend(['3_4'])
+                            elif entry == '3.5':
+                                py_versions.extend(['3_5'])
 
 
                     if "License" in categories:
@@ -275,7 +277,7 @@ class PypiDBGenerator(DBGenerator):
             pkg_license = self.convert([common_config, config], "licenses", pkg_license)
 
             if not py_versions:
-                py_versions = ['2_7', '3_2', '3_3', '3_4']
+                py_versions = ['2_7', '3_3', '3_4', '3_5']
 
             if len(py_versions) == 1:
                 python_compat = '( python' + py_versions[0] + ' )'
